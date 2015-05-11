@@ -8,9 +8,15 @@ class AghMatrix {
 
   AghMatrix(int,int);
 
+  int getRows(){return this->rows;};
+  int getCols(){return this->cols;};
+
+  T getItem(int r,int c){return this->matrix[r][c];};
   void setItem(int r, int c, T value);
   void setItems(T *pt);
   void setItems(int r, int c,...);
+
+  AghMatrix operator*(AghMatrix&);
 
   void print();
 
@@ -24,6 +30,11 @@ AghMatrix<T>::AghMatrix(int rows, int cols) {
   for( int i=0 ; i<this->rows ; ++i ) {
     this->matrix[i] = new T[this->cols];
   }
+}
+
+template<class T>
+void AghMatrix<T>::setItem(int r, int c, T value) {
+  this->matrix[r][c] = value;
 }
 
 template<class T>
@@ -58,5 +69,13 @@ void AghMatrix<T>::print() {
       ++pt;
     }
     cout << endl;
+  }
+}
+
+template<class T>
+AghMatrix<T> AghMatrix<T>::operator*(AghMatrix &m) {
+  if( this->cols == m.getRows() ) {
+    
+    return *this;
   }
 }
