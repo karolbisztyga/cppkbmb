@@ -74,8 +74,19 @@ void AghMatrix<T>::print() {
 
 template<class T>
 AghMatrix<T> AghMatrix<T>::operator*(AghMatrix &m) {
+  AghMatrix result(this->rows,m.getCols());
   if( this->cols == m.getRows() ) {
-    
-    return *this;
+    for( int i=0 ; i<this->rows ; ++i ) {
+      for( int j=0,endj=m.getCols() ; j<endj ; ++j ) {
+        T t=0;
+        for( int k=0 ; k<this->cols ; ++k ) {
+          t += this->matrix[i][k]*m.getItem(k,j) ;
+          //c = c.add(Complex(this->matrix[i][k]).mul(m.get(k,j)));
+          //cout << "mul: [" << i << "," << k << "] * [" << k << "," << j << "]\n" ;
+        }
+        result.setItem(i,j,t);
+      }
+    }
+  return result;
   }
 }
