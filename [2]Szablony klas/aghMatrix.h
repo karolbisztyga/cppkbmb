@@ -12,23 +12,51 @@ class AghMatrix {
   void setItems(T *pt);
   void setItems(int r, int c,...);
 
+  void print();
+
 };
 
 template<class T>
 AghMatrix<T>::AghMatrix(int rows, int cols) {
   this->rows = rows;
   this->cols = cols;
-  cout << "constructor!" ;
+  this->matrix = new T*[this->rows];
+  for( int i=0 ; i<this->rows ; ++i ) {
+    this->matrix[i] = new T[this->cols];
+  }
 }
 
 template<class T>
-setItems(int r, int c,...) {
-  /*va_list ap;
-  va_start(ap, n);
-  int max = va_arg(ap, int);
-  for(int i = 2; i <= n; i++) {
-      int a = va_arg(ap, int);
-      if(a > max) max = a;
+void AghMatrix<T>::setItems(T *pt) {
+  for( int i=0 ; i<this->rows ; ++i ) {
+    for( int j=0 ; j<this->cols ; ++j ) {
+      this->matrix[i][j] = *pt;
+      ++pt;
+    }
   }
-  va_end(ap);*/
+}
+  
+template<class T>
+void AghMatrix<T>::setItems(int r, int c,...) {
+  va_list ap;
+  va_start(ap, c);
+  int counter=0;
+  for( int i=0 ; i<this->rows ; ++i ) {
+    for( int j=0 ; j<this->cols ; ++j ) {
+      this->matrix[i][j] = va_arg(ap,T);
+    }
+  }
+  va_end(ap);
+}
+
+template<class T>
+void AghMatrix<T>::print() {
+  T *pt = &this->matrix[0][0];
+  for( int i=0 ; i<this->rows ; ++i ) {
+    for( int j=0 ; j<this->cols ; ++j ) {
+      cout << "[" << this->matrix[i][j] << "]";
+      ++pt;
+    }
+    cout << endl;
+  }
 }
