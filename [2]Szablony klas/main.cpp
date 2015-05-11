@@ -18,7 +18,7 @@ int main() {
 
   AghMatrix<int> aghM(2,2);
   cout << max(5,1,2,3,4,5) << " " ;
-  cout << "Siema..." ;
+  cout << "Siema...elomelo" ;
 
   cout << endl;
   return 0;
