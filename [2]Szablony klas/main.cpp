@@ -17,6 +17,8 @@ int main() {
   cout << endl;
   (aghM1*aghM2).print();
 
+  cout << endl << aghM2(0,0) ;
+
   cout << endl;
   return 0;
 }

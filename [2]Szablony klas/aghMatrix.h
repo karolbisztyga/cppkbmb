@@ -17,6 +17,7 @@ class AghMatrix {
   void setItems(int r, int c,...);
 
   AghMatrix operator*(AghMatrix&);
+  T operator()(int, int);
 
   void print();
 
@@ -89,4 +90,9 @@ AghMatrix<T> AghMatrix<T>::operator*(AghMatrix &m) {
     }
   return result;
   }
+}
+
+template<class T>
+T AghMatrix<T>::operator()(int r, int c) {
+  return this->matrix[r][c];
 }
