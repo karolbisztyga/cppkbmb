@@ -9,7 +9,7 @@ int main() {
   aghM1.setItems(2,2,-2,-3,1,-1,4,0);
   aghM1.print();
   cout << " x " << endl;
-  int tab[] = {-2,-1,2,3,0,1,2,2,-1};
+  int tab[] = {-2,-1,2,3,0,1,2,2,-2};
   aghM2.setItems(tab);
   aghM2.print();
 
