@@ -18,6 +18,10 @@ class AghMatrix {
 
   AghMatrix operator*(AghMatrix&);
   T operator()(int, int);
+	AghMatrix operator+(AghMatrix&);
+	AghMatrix operator-(AghMatrix&);
+	bool operator==(AghMatrix&);
+	bool operator!=(AghMatrix&);
 
   void print();
 
@@ -95,4 +99,64 @@ AghMatrix<T> AghMatrix<T>::operator*(AghMatrix &m) {
 template<class T>
 T AghMatrix<T>::operator()(int r, int c) {
   return this->matrix[r][c];
+}
+
+template<class T>
+AghMatrix<T> AghMatrix<T>::operator+(AghMatrix &m) {	
+	AghMatrix result(this->rows, m.getCols());
+	if( this->cols == m.getCols() && this->rows == m.getRows() ) {
+		for (int i = 0; i < this->rows; ++i) {
+			for (int j = 0; j < this->cols; ++j) {
+				T t = 0;
+				t = this->matrix[i][j] + m.getItem(i,j);
+				result.setItem(i,j,t);
+			}
+		}
+	return result;
+	}
+}
+
+template<class T>
+AghMatrix<T> AghMatrix<T>::operator-(AghMatrix &m) {	
+	AghMatrix result(this->rows, m.getCols());
+	if( this->cols == m.getCols() && this->rows == m.getRows() ) {
+		for (int i = 0; i < this->rows; ++i) {
+			for (int j = 0; j < this->cols; ++j) {
+				T t = 0;
+				t = this->matrix[i][j] - m.getItem(i,j);
+				result.setItem(i,j,t);
+			}
+		}
+	return result;
+	}
+}
+
+template<class T>
+bool AghMatrix<T>::operator==(AghMatrix &m) {
+	if( this->cols == m.getCols() && this->rows == m.getRows() ) {
+		for (int i = 0; i < this->rows; ++i) {
+			for (int j = 0; j < this->cols; ++j) {
+				bool t;
+				t = (this->matrix[i][j] == m.getItem(i,j));
+					if(t)
+						continue;
+					else return false;
+			}
+		}
+	}
+}
+
+template<class T>
+bool AghMatrix<T>::operator!=(AghMatrix &m) {
+	if( this->cols == m.getCols() && this->rows == m.getRows() ) {
+		for (int i = 0; i < this->rows; ++i) {
+			for (int j = 0; j < this->cols; ++j) {
+				bool t;
+				t = (this->matrix[i][j] != m.getItem(i,j));
+					if(t)
+						continue;
+					else return false;
+			}
+		}
+	}
 }
