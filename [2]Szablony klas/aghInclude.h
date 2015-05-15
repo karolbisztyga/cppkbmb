@@ -3,5 +3,6 @@
 
 using namespace std;
 
+#include "aghException.h"
 #include "aghMatrix.h"
 
