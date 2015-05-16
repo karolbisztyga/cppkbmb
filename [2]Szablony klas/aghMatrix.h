@@ -135,11 +135,15 @@ aghMatrix<T> aghMatrix<T>::operator*(aghMatrix &m) {
   aghMatrix result(this->rows,m.getCols());
   for( int i=0 ; i<this->rows ; ++i ) {
     for( int j=0,endj=m.getCols() ; j<endj ; ++j ) {
-      T t=0;
+      T t[this->cols];
       for( int k=0 ; k<this->cols ; ++k ) {
-        t += this->matrix[i][k]*m.getItem(k,j) ;
+        t[k] = this->matrix[i][k]*m.getItem(k,j) ;
       }
-      result.setItem(i,j,t);
+      T addT = t[0];
+      for( int l=1 ; l<this->cols ; ++l ) {
+        addT = addT+t[l];
+      }
+      result.setItem(i,j,addT);
     }
   }
   return result;
