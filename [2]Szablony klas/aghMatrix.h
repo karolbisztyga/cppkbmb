@@ -1,3 +1,6 @@
+#ifndef AGHMATRIX_H
+#define AGHMATRIX_H
+
 template<class T>
 
 class aghMatrix {
@@ -5,14 +8,13 @@ class aghMatrix {
     T **matrix;
     int rows,cols;
 
-
     char addChars(char,char);
     char multipleChars(char,char);
     void setSize(int,int);
-    char* addWords(char*,char*);
     char* multipleWords(char*,char*);
     char* addLetter(char*,char);
   public:
+    char* addWords(char*,char*);
 
 //constructors/destructors
   aghMatrix();
@@ -36,7 +38,7 @@ class aghMatrix {
   aghMatrix<T> operator+(aghMatrix<T>&);
   bool operator==(aghMatrix<T>&);
   bool operator!=(aghMatrix<T>&);
-  aghMatrix<T> operator=(aghMatrix<T>&);
+  aghMatrix<T> operator=(aghMatrix<T>);
 
 //other methods
   void print();
@@ -196,7 +198,7 @@ bool aghMatrix<T>::operator!=(aghMatrix &m) {
 }
 
 template<class T>
-aghMatrix<T> aghMatrix<T>::operator=(aghMatrix<T> &m) {
+aghMatrix<T> aghMatrix<T>::operator=(aghMatrix<T> m) {
   if( this->rows != m.getRows() || this->cols != m.getCols() ) {
     this->setSize(m.getRows(),m.getCols());
   }
@@ -225,6 +227,24 @@ aghMatrix<char> aghMatrix<char>::operator*(aghMatrix &m) {
       char c = 'a';
       for( int k=0 ; k<this->cols ; ++k ) {
         c = this->addChars(c,this->multipleChars(this->matrix[i][k],m.getItem(k,j)));
+      }
+      result.setItem(i,j,c);
+    }
+  }
+  return result;
+}
+
+template<>
+aghMatrix<char*> aghMatrix<char*>::operator*(aghMatrix<char*> &m) {
+  if( this->cols != m.getRows() ) {
+    throw aghException(0, "Matrixes don't match", __FILE__, __LINE__);
+  }
+  aghMatrix<char*> result(this->rows,m.getCols());
+  for( int i=0 ; i<this->rows ; ++i ) {
+    for( int j=0,endj=m.getCols() ; j<endj ; ++j ) {
+      char* c = new char[0];
+      for( int k=0 ; k<this->cols ; ++k ) {
+        c = this->addWords(c,this->multipleWords(this->matrix[i][k],m.getItem(k,j)));
       }
       result.setItem(i,j,c);
     }
@@ -275,13 +295,13 @@ char* aghMatrix<char*>::operator()(int r, int c) {
   }
   return result;
 }
-/*
+
 template<>
-aghMatrix<char*> aghMatrix<char*>::operator=(aghMatrix<char*> &m) {
+aghMatrix<char*> aghMatrix<char*>::operator=(aghMatrix<char*> m) {
   if( this->rows != m.getRows() || this->cols != m.getCols() ) {
     this->setSize(m.getRows(),m.getCols());
   }
-  aghMatrix<T> result(this->rows,this->cols);
+  aghMatrix<char*> result(this->rows,this->cols);
   if( this->cols == m.getCols() && this->rows == m.getRows() ) {
     for (int i = 0; i < this->rows; ++i) {
       for (int j = 0; j < this->cols; ++j) {
@@ -302,21 +322,38 @@ aghMatrix<char*> aghMatrix<char*>::operator=(aghMatrix<char*> &m) {
   return result;
 }
 
-
-/*
 template<>
-aghMatrix<char*> aghMatrix<char*>::operator+(aghMatrix<char*> &m) {
-  if( this->rows == m.getRows() && this->cols == m.getCols() ) {
-    aghMatrix<char> result(this->rows,this->cols);
-    for( short i=0 ; i<this->rows ; ++i ) {
-      for( short j=0 ; j<this->cols ; ++j ) {
-        char x = this->addChars(this->matrix[i][j],m.getItem(i,j));
-        //cout << "\n "<< this->matrix[i][j] << "+" << m.getItem(i,j) << "=" << x <<" \n" ;
-        result.setItem(i,j,x);
+bool aghMatrix<char*>::operator==(aghMatrix<char*> &m) {
+  if( this->cols != m.getCols() || this->rows != m.getRows() ) {
+    return false;
+  }
+  for (int i = 0; i < this->rows; ++i) {
+    for (int j = 0; j < this->cols; ++j) {
+      int counter = 0;
+      while( this->matrix[i][j][counter]!='\0' ) {
+        if( this->matrix[i][j][counter] != m.getItem(i,j)[counter] ) {
+          return false;
+        }
+        ++counter;
       }
     }
-    return result;
   }
+  return true;
+}
+
+
+template<>
+aghMatrix<char*> aghMatrix<char*>::operator+(aghMatrix<char*> &m) {
+  if( this->rows != m.getRows() || this->cols != m.getCols() ) {
+    throw aghException(0, "Matrixes don't match", __FILE__, __LINE__);
+  }
+  aghMatrix<char*> result(this->rows,this->cols);
+  for( short i=0 ; i<this->rows ; ++i ) {
+    for( short j=0 ; j<this->cols ; ++j ) {
+      result.setItem(i,j,this->addWords(this->matrix[i][j],m.getItem(i,j)));
+    }
+  }
+  return result;
 }
 
 /*          OTHER METHODS                     */
@@ -343,19 +380,33 @@ char aghMatrix<T>::multipleChars(char a,char b) {
 
 template<class T>
 char* aghMatrix<T>::addWords(char *a,char *b) {
-  char *result = a;
+  char *result = new char[0];
   int aLen = 0;
   while( a[aLen]!='\0' ) {
+    bool add = true;
+    int i=0;
+    while( result[i]!='\0' ) {
+      if( result[i]==a[aLen] ) {
+        add = false;
+        break;
+      }
+      ++i;
+    }
+    if( add ) {
+      result = this->addLetter(result,a[aLen]);
+    }
     ++aLen;
   }
   int bLen = 0;
   while( b[bLen]!='\0' ) {
     bool add = true;
-    for( int i=0 ; i<aLen ; ++i ) {
-      if( a[i]==b[bLen] ) {
+    int i=0;
+    while( result[i]!='\0' ) {
+      if( result[i]==b[bLen] ) {
         add = false;
         break;
       }
+      ++i;
     }
     if( add ) {
       result = this->addLetter(result,b[bLen]);
@@ -406,3 +457,5 @@ char* aghMatrix<T>::addLetter(char *word,char letter) {
   result[len] = letter;
   return result;
 }
+
+#endif
