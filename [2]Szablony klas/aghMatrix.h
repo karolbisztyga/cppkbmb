@@ -13,8 +13,8 @@ class aghMatrix {
     void setSize(int,int);
     char* multipleWords(char*,char*);
     char* addLetter(char*,char);
-  public:
     char* addWords(char*,char*);
+  public:
 
 //constructors/destructors
   aghMatrix();
@@ -188,17 +188,7 @@ bool aghMatrix<T>::operator==(aghMatrix &m) {
 
 template<class T>
 bool aghMatrix<T>::operator!=(aghMatrix &m) {
-  if( this->cols != m.getCols() || this->rows != m.getRows() ) {
-    return true;
-  }
-  for (int i = 0; i < this->rows; ++i) {
-    for (int j = 0; j < this->cols; ++j) {
-      if(this->matrix[i][j] != m.getItem(i,j)) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return !(*this==m);
 }
 
 template<class T>
@@ -278,7 +268,6 @@ aghMatrix<char> aghMatrix<char>::operator+(aghMatrix<char> &m) {
     for( short i=0 ; i<this->rows ; ++i ) {
       for( short j=0 ; j<this->cols ; ++j ) {
         char x = this->addChars(this->matrix[i][j],m.getItem(i,j));
-        //cout << "\n "<< this->matrix[i][j] << "+" << m.getItem(i,j) << "=" << x <<" \n" ;
         result.setItem(i,j,x);
       }
     }
