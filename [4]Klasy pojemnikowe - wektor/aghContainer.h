@@ -4,15 +4,9 @@
 template<class T>
 class aghContainer {
   private:
-
+    
   public:
-//pure virtual
-    virtual ~aghContainer() = 0;
-    virtual bool insert(int, T const&) = 0;
-    virtual T& at(int) const = 0;
-    virtual int size() const = 0;
-    virtual bool remove(int) = 0;
-//others
+
     void append(T const&);
     bool replace(int, T const&);
     void clear();
@@ -28,7 +22,16 @@ class aghContainer {
     aghContainer<T>& operator<<(aghContainer<T> const& right);
     friend ostream& operator<<(ostream&, aghContainer<T> const& right);
 
+    virtual ~aghContainer();
+    virtual bool insert(int, T const&) = 0;
+    virtual T& at(int) const = 0;
+    virtual int size() const = 0;
+    virtual bool remove(int) = 0;
+
 };
+
+template<class T>
+aghContainer<T>::~aghContainer(){}
 
 /// \brief appends the element to the container
 ///
@@ -37,7 +40,7 @@ class aghContainer {
 /// \return void
 template<class T>
 void aghContainer<T>::append(T const &t) {
-
+    this->insert(this->size(),t);
 }
 
 /// \brief replaces the element with given index
@@ -48,7 +51,7 @@ void aghContainer<T>::append(T const &t) {
 /// \return void
 template<class T>
 bool aghContainer<T>::replace(int index, T const &t) {
-
+    this->at(index) = t;
 }
 
 /// \brief clears the container
@@ -56,7 +59,9 @@ bool aghContainer<T>::replace(int index, T const &t) {
 /// \return void
 template<class T>
 void aghContainer<T>::clear() {
-
+    while( this->size() > 0 ) {
+        this->remove(this->size()-1);
+    }
 }
 
 /// \brief checks if the container contains any elements or not
@@ -66,7 +71,7 @@ void aghContainer<T>::clear() {
 /// \false - container isn't empty
 template<class T>
 bool aghContainer<T>::isEmpty() {
-
+    return (this->size()==0);
 }
 
 /// \brief returns index of given element
@@ -77,7 +82,12 @@ bool aghContainer<T>::isEmpty() {
 /// \return void
 template<class T>
 int aghContainer<T>::indexOf(T const& _value, int _from) const {
-
+    for( int i=_from,s=this->size() ; i<s ; ++i ) {
+        if( _value == this->at(i) ) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 /// \brief pecifies if given element exists in the container
@@ -90,7 +100,7 @@ int aghContainer<T>::indexOf(T const& _value, int _from) const {
 /// \false - element isn't in the container
 template<class T>
 bool aghContainer<T>::contains(T const& _value, int _from) const {
-    
+    return ( this->indexOf(_value,_from) != -1 );
 }
 
 /// \brief compares two containers
@@ -102,7 +112,16 @@ bool aghContainer<T>::contains(T const& _value, int _from) const {
 /// \false - not equal
 template<class T>
 bool aghContainer<T>::operator==(aghContainer<T> const& right) {
-    
+    int size = this->size();
+    if( size != right.size() ) {
+        return false;
+    }
+    for( int i=0 ; i<size ; ++i ) {
+        if( this->at(i) != right.at(i) ) {
+            return false;
+        }
+    }
+    return true;
 }
 /// \brief compares two containers
 ///
@@ -113,7 +132,7 @@ bool aghContainer<T>::operator==(aghContainer<T> const& right) {
 /// \false - equal
 template<class T>
 bool aghContainer<T>::operator!=(aghContainer<T> const& right) {
-    
+    return !(*this == right );
 }
 
 /// \brief returns element with given index
@@ -123,7 +142,7 @@ bool aghContainer<T>::operator!=(aghContainer<T> const& right) {
 /// \return T& - adress of an element
 template<class T>
 T& aghContainer<T>::operator[](int n) const {
-    
+    return this->at(n);
 }
 
 /// \brief adds elements from given container to another one
@@ -133,7 +152,10 @@ T& aghContainer<T>::operator[](int n) const {
 /// \return aghContainer<T>& - summed container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator+=(aghContainer<T> const& right) {
-    
+    for( int i=0,s=right.size() ; i<s ; ++i ) {
+        this->append(right.at(i));
+    }
+    return *this;
 }
 
 /// \brief adds element to the container
@@ -143,7 +165,8 @@ aghContainer<T>& aghContainer<T>::operator+=(aghContainer<T> const& right) {
 /// \return aghContainer<T>& - summed container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator+=(T const& element) {
-    
+    this->append(element);
+    return *this;
 }
 
 /// \brief adds element to the container
@@ -153,7 +176,8 @@ aghContainer<T>& aghContainer<T>::operator+=(T const& element) {
 /// \return aghContainer<T>& - summed container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator<<(T const& element) {
-    
+    this->append(element);
+    return *this;
 }
 
 /// \brief adds elements from given container to another one
@@ -163,7 +187,8 @@ aghContainer<T>& aghContainer<T>::operator<<(T const& element) {
 /// \return aghContainer<T>& - summed container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator<<(aghContainer<T> const& right) {
-
+    *this+= right;
+    return *this;
 }
 
 #endif
