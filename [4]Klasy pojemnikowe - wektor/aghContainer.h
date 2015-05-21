@@ -167,7 +167,6 @@ aghContainer<T>& aghContainer<T>::operator+=(aghContainer<T> const& right) {
 /// \return aghContainer<T>& - summed container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator+=(T const& element) {
-    //cout << "\nhere"<< element <<"\n" ;
     this->append(element);
     return *this;
 }
@@ -193,20 +192,21 @@ aghContainer<T>& aghContainer<T>::operator<<(aghContainer<T> const& right) {
     *this+= right;
     return *this;
 }
-/*
-template<class T>
-aghContainer<T>& aghContainer<T>::operator=(T const& element) {
-    cout << "\nhere 2\n" ;
-}
-*/
 
+/// \brief assigment operator
+///
+/// \param c - container to be asigned
+///
+/// \return aghContainer<T>& - assigned container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator=(aghContainer<T> const& c) {
-    this->clear();
-    for( int i=0,l=c.size() ; i<l ; ++i ) {
-        this->append(c.at(i));
+    if( this->operator!=(c) ) {
+        this->clear();
+        for( int i=0,l=c.size() ; i<l ; ++i ) {
+            this->append(c.at(i));
+        }
+        return *this;
     }
-    return *this;
 }
 
 

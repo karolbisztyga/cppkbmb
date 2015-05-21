@@ -24,14 +24,7 @@ private:
 	int length;
 	T *items;
 };
-/*
-template<class T>
-aghVector<T>& aghVector<T>::operator+=(T const& element) {
-	cout << "\nherer\n" ;
-	aghContainer<T>::operator+=(element);
-	return *this;
-}
-*/
+
 template<class T>
 aghVector<T>::aghVector() {
 	this->length = 0;
@@ -157,13 +150,6 @@ void aghVector<T>::print() {
 
 template<class T>
 aghVector<T>& aghVector<T>::operator=(aghVector<T> const& element) {
-	/*this->length = element.size();
-	delete [] this->items;
-	this-> items = new T[this->length];
-	for( int i=0 ; i<this->length ; ++i ) {
-		this->items[i] = element.at(i);
-	}
-	return *this;*/
 	if( this->operator!=(element) ) {
 		this->aghContainer<T>::operator=(element);
 	}
@@ -172,17 +158,9 @@ aghVector<T>& aghVector<T>::operator=(aghVector<T> const& element) {
 template<class T>
 aghVector<T>& aghVector<T>::operator=(aghContainer<T> const& element) {
 	if( this->operator!=(element) ) {
-		/*this->length = element.size();
-		delete [] this->items;
-		this-> items = new T[this->length];
-		for( int i=0 ; i<this->length ; ++i ) {
-			this->items[i] = element.at(i);
-		}
-		return *this;*/
 		this->aghContainer<T>::operator=(element);
 	}
 }
-/* */
 
 template<class T>
 bool aghVector<T>::operator==(aghContainer<T> const& element) {
