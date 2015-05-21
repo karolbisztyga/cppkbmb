@@ -8,7 +8,6 @@ int main(void)
 {
     cout << "main by kk. Last updated 15.04.2013\n";
     
-/*
     aghVector<aghVector<int> > a;
     aghContainer<int>* c1 = new aghVector<int>;
     aghContainer<int>* c2;
@@ -21,8 +20,9 @@ int main(void)
 
     bool t1 = c1->size() == 3;
     int ttab1[] = {2, 3, 2};
-    for(int i=0;i<3;i++)
+    for(int i=0;i<3;i++) {
         t1 = t1 && (ttab1[i] == c1->at(i));
+    }
     showTestResult(1, t1);
 
     // 2nd test - konstruktor
@@ -57,6 +57,7 @@ int main(void)
     for(int i=0;i<5;i++)
         *c1 += i;
     *c1 << 4 << 2+3;
+    //aghVector<int> *pt = static_cast<aghVector<int>*>(c1);
     c1->remove(2);
 
     int ttab4[] = {0, 1, 3, 4, 4, 5};
@@ -87,15 +88,16 @@ int main(void)
     // 10th test - metoda contains
     showTestResult(10, !c1->contains(-6));
 
-
     // 11th test - operacje na pojemniku w pojemniku
-    for(int i=3;i>=0;i--)
+    for(int i=3;i>=0;i--) {
         a.at(0) += i+1;
+    }
 
     bool t11 = a.at(0).size() == 4;
     int ttab11[] = {4, 3, 2, 1};
-    for(int i=0;t11 && i<4;i++)
+    for(int i=0;t11 && i<4;i++) {
         t11 = t11 && (a.at(0).at(i) == ttab11[i]);
+    }
     showTestResult(11, t11);
 
     // 12th test - usuwanie z pojemnika
@@ -104,22 +106,23 @@ int main(void)
     a.at(0).remove(1);   // 4
     a.at(0).remove(0);   // empty
     showTestResult(12, a.at(0).isEmpty());
-
     // 13th test - dzialanie operatora przypisania
     *c2  = a.at(0) = *c1;
     showTestResult(13, *c1 == a.at(0));
-
+/*
     // 14th test - operator przypisania
     try
     {
         *c2 = *c2;
+        //aghVector<int> *pt = static_cast<aghVector<int>*>(c1);
+        //pt->print();
         showTestResult(14, *c1 == *c2);
     }
     catch(...)
     {
         showTestResult(14, false);
     }
-
+/*
     // 15th test - zwalnianie paieci
     try
     {

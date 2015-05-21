@@ -13,14 +13,16 @@ class aghContainer {
     bool isEmpty();
     int indexOf(T const& _value, int _from = 0) const;
     bool contains(T const& _value, int _from = 0) const;
-    bool operator==(aghContainer<T> const& right);
-    bool operator!=(aghContainer<T> const& right);
+    bool operator==(aghContainer<T> const&);
+    bool operator!=(aghContainer<T> const&);
     T& operator[](int n) const;
-    aghContainer<T>& operator+=(aghContainer<T> const& right);
-    aghContainer<T>& operator+=(T const& element);
-    aghContainer<T>& operator<<(T const& element);
-    aghContainer<T>& operator<<(aghContainer<T> const& right);
-    friend ostream& operator<<(ostream&, aghContainer<T> const& right);
+    aghContainer<T>& operator+=(aghContainer<T> const&);
+    aghContainer<T>& operator+=(T const&);
+    aghContainer<T>& operator<<(T const&);
+    aghContainer<T>& operator<<(aghContainer<T> const&);
+    friend ostream& operator<<(ostream&, aghContainer<T> const&);
+    aghContainer<T>& operator=(aghContainer<T> const&);
+
 
     virtual ~aghContainer();
     virtual bool insert(int, T const&) = 0;
@@ -165,6 +167,7 @@ aghContainer<T>& aghContainer<T>::operator+=(aghContainer<T> const& right) {
 /// \return aghContainer<T>& - summed container's reference
 template<class T>
 aghContainer<T>& aghContainer<T>::operator+=(T const& element) {
+    //cout << "\nhere"<< element <<"\n" ;
     this->append(element);
     return *this;
 }
@@ -190,5 +193,21 @@ aghContainer<T>& aghContainer<T>::operator<<(aghContainer<T> const& right) {
     *this+= right;
     return *this;
 }
+/*
+template<class T>
+aghContainer<T>& aghContainer<T>::operator=(T const& element) {
+    cout << "\nhere 2\n" ;
+}
+*/
+
+template<class T>
+aghContainer<T>& aghContainer<T>::operator=(aghContainer<T> const& c) {
+    this->clear();
+    for( int i=0,l=c.size() ; i<l ; ++i ) {
+        this->append(c.at(i));
+    }
+    return *this;
+}
+
 
 #endif
