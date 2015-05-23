@@ -32,6 +32,9 @@ class aghContainer {
 
 };
 
+/// \brief constructor no params
+///
+///
 template<class T>
 aghContainer<T>::~aghContainer(){}
 
