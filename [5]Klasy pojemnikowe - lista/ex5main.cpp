@@ -10,10 +10,7 @@ int main(void)
 
     aghSList<int> list;
     list.append(5);
-    list.append(3);
-    list.append(9);
-    list.append(1);
-    list.insert(2,2);
+    list.insert(1,1);
     list.print();
     list.remove(0);
     list.print();

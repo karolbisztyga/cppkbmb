@@ -101,6 +101,9 @@ int aghSList<T>::size() const {
 template<class T>
 bool aghSList<T>::remove(int index) {
     if( index == 0 ) {
+        if( this->head == NULL ) {
+            return false;
+        }
         aghSListItem<T> *it = ( this->head->getNext() != NULL ) ? this->head->getNext() : NULL ;
         this->head = it;
     }
