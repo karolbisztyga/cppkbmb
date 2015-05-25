@@ -13,12 +13,12 @@ class aghSListItem {
     aghSListItem *getNext() const;
     void setNext(aghSListItem*);
 
-    T getValue();
+    T& getValue();
     void setValue(const T&);
 };
 
 template<class T>
-aghSListItem<T>::aghSListItem(const T &value) {
+aghSListItem<T>::aghSListItem(const T &value) {//} : value(_value) {
     this->next = NULL;
     this->value = value;
 }
@@ -34,7 +34,7 @@ void aghSListItem<T>::setNext(aghSListItem<T> *next) {
 }
 
 template<class T>
-T aghSListItem<T>::getValue() {
+T& aghSListItem<T>::getValue() {
     return this->value;
 }
 

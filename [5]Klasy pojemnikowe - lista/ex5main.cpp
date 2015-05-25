@@ -7,6 +7,18 @@ void showTestResult(int, bool);
 int main(void)
 {
     cout << "main by kk. Last updated 15.04.2013\n";
+
+    aghSList<int> list;
+    list.append(5);
+    list.append(3);
+    list.append(9);
+    list.append(1);
+    list.insert(2,2);
+    list.print();
+    list.remove(0);
+    list.print();
+    cout << endl << list.size() << endl;
+
 /*
     aghDlist<aghDlist<int> > a;
     aghContainer<int>* c1 = new aghDlist<int>;
