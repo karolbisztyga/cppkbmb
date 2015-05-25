@@ -7,7 +7,7 @@ void showTestResult(int, bool);
 int main(void)
 {
     cout << "main by kk. Last updated 15.04.2013\n";
-
+/*
     aghDlist<aghDlist<int> > a;
     aghContainer<int>* c1 = new aghDlist<int>;
     aghContainer<int>* c2;
@@ -129,7 +129,7 @@ int main(void)
     {
         showTestResult(15, false);
     }
-
+*/
     cout << "Finally, this is the end...\n";
 
     return 0;
