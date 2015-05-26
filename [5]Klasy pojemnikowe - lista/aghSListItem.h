@@ -2,44 +2,44 @@
 #define AGHSLISTITEM_H
 
 template<class T>
-class aghSListItem {
+class aghSlistItem {
 
   private:
-    aghSListItem *next;
+    aghSlistItem *next;
     T value;
   public:
-  	aghSListItem(const T&);
+  	aghSlistItem(const T&);
 
-    aghSListItem *getNext() const;
-    void setNext(aghSListItem*);
+    aghSlistItem *getNext() const;
+    void setNext(aghSlistItem*);
 
     T& getValue();
     void setValue(const T&);
 };
 
 template<class T>
-aghSListItem<T>::aghSListItem(const T &value) {//} : value(_value) {
+aghSlistItem<T>::aghSlistItem(const T &value) {//} : value(_value) {
     this->next = NULL;
     this->value = value;
 }
 
 template<class T>
-aghSListItem<T>* aghSListItem<T>::getNext() const {
+aghSlistItem<T>* aghSlistItem<T>::getNext() const {
     return this->next;
 }
 
 template<class T>
-void aghSListItem<T>::setNext(aghSListItem<T> *next) {
+void aghSlistItem<T>::setNext(aghSlistItem<T> *next) {
     this->next = next;
 }
 
 template<class T>
-T& aghSListItem<T>::getValue() {
+T& aghSlistItem<T>::getValue() {
     return this->value;
 }
 
 template<class T>
-void aghSListItem<T>::setValue(const T &value) {
+void aghSlistItem<T>::setValue(const T &value) {
     this->value = value;
 }
 

@@ -4,7 +4,7 @@ using namespace std;
 
 #include "aghException.h"
 #include "aghContainer.h"
-#include "aghSListItem.h"
-#include "aghDListItem.h"
-#include "aghSList.h"
-#include "aghDList.h"
+#include "aghSlistItem.h"
+#include "aghDlistItem.h"
+#include "aghSlist.h"
+#include "aghDlist.h"

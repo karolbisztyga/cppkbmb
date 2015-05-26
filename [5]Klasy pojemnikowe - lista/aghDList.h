@@ -2,45 +2,45 @@
 #define AGHDLIST_H
 
 template<class T>
-class aghDList : public aghContainer<T> {
+class aghDlist : public aghContainer<T> {
   public:
-    virtual ~aghDList();
-    aghDList();
-    aghDList(const aghDList&);
-    //aghDList(aghContainer<T>&);
+    virtual ~aghDlist();
+    aghDlist();
+    aghDlist(const aghDlist&);
+    //aghDlist(aghContainer<T>&);
     bool insert(int, T const&);
     T& at(int) const;
     int size() const;
     bool remove(int);
-    aghDList<T>& operator=(aghDList<T> const& element);
+    aghDlist<T>& operator=(aghDlist<T> const& element);
     bool operator==(aghContainer<T> const& element);
     bool operator!=(aghContainer<T> const& element);
 
-    aghDListItem<T>& getHead() const;
+    aghDlistItem<T>& getHead() const;
     void print();
   private:
-    aghDListItem<T> *head;
+    aghDlistItem<T> *head;
 };
 
 template<class T>
-aghDList<T>::aghDList() {
+aghDlist<T>::aghDlist() {
     this->head = NULL;
 }
 
 template<class T>
-aghDList<T>::~aghDList() {
+aghDlist<T>::~aghDlist() {
     delete this->head;
 }
 
 template<class T>
-aghDListItem<T>& aghDList<T>::getHead() const {
+aghDlistItem<T>& aghDlist<T>::getHead() const {
     return *(this->head);
 }
 
 template<class T>
-aghDList<T>::aghDList(const aghDList &list) {
+aghDlist<T>::aghDlist(const aghDlist &list) {
     this->head = NULL;
-    aghDListItem<T> *temp = &list.getHead();
+    aghDlistItem<T> *temp = &list.getHead();
     while( temp != NULL ) {
         this->append(temp->getValue());
         temp = temp->getNext();
@@ -48,14 +48,14 @@ aghDList<T>::aghDList(const aghDList &list) {
 }
 
 template<class T>
-bool aghDList<T>::insert(int index, T const &t) {
-    aghDListItem<T> *item = new aghDListItem<T>(NULL,t);
+bool aghDlist<T>::insert(int index, T const &t) {
+    aghDlistItem<T> *item = new aghDlistItem<T>(NULL,t);
     if( this->head == NULL && index == 0 ) {
         this->head = item;
         return true;
     }
     int i=1;
-    aghDListItem<T> *temp = this->head;
+    aghDlistItem<T> *temp = this->head;
     while( temp != NULL ) {
         if( i == index ) {
             if( temp->getNext() != NULL ) {
@@ -74,8 +74,8 @@ bool aghDList<T>::insert(int index, T const &t) {
 }
 
 template<class T>
-T& aghDList<T>::at(int index) const {
-    aghDListItem<T> *temp = this->head;
+T& aghDlist<T>::at(int index) const {
+    aghDlistItem<T> *temp = this->head;
     int i=0;
     while( temp != NULL ) {
         if( i == index ) {
@@ -88,8 +88,8 @@ T& aghDList<T>::at(int index) const {
 }
 
 template<class T>
-int aghDList<T>::size() const {
-    aghDListItem<T> *temp = this->head;
+int aghDlist<T>::size() const {
+    aghDlistItem<T> *temp = this->head;
     int size = 0;
     while( temp != NULL ) {
         ++size;
@@ -99,8 +99,8 @@ int aghDList<T>::size() const {
 }
 
 template<class T>
-bool aghDList<T>::remove(int index) {
-    aghDListItem<T> *temp = this->head;
+bool aghDlist<T>::remove(int index) {
+    aghDlistItem<T> *temp = this->head;
     int i=0;
     while( temp != NULL ) {
         if( i == index ) {
@@ -124,10 +124,10 @@ bool aghDList<T>::remove(int index) {
 }
 
 template<class T>
-aghDList<T>& aghDList<T>::operator=(aghDList<T> const& list) {
-    if( aghDList<T>::operator!=(list) ) {
+aghDlist<T>& aghDlist<T>::operator=(aghDlist<T> const& list) {
+    if( aghDlist<T>::operator!=(list) ) {
         this->clear();
-        aghDListItem<T> *temp = &list.getHead();
+        aghDlistItem<T> *temp = &list.getHead();
         while( temp != NULL ) {
             this->append(temp->getValue());
             temp = temp->getNext();
@@ -136,19 +136,19 @@ aghDList<T>& aghDList<T>::operator=(aghDList<T> const& list) {
 }
 
 template<class T>
-bool aghDList<T>::operator==(aghContainer<T> const& element) {
+bool aghDlist<T>::operator==(aghContainer<T> const& element) {
     return this->aghContainer<T>::operator==(element);
 }
 
 template<class T>
-bool aghDList<T>::operator!=(aghContainer<T> const& element) {
+bool aghDlist<T>::operator!=(aghContainer<T> const& element) {
     return this->aghContainer<T>::operator!=(element);
 }
 
 
 template<class T>
-void aghDList<T>::print() {
-    aghDListItem<T> *temp = this->head;
+void aghDlist<T>::print() {
+    aghDlistItem<T> *temp = this->head;
     cout << "[ " ;
     while( temp != NULL ) {
         cout << temp->getValue() << " " ;

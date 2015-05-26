@@ -2,50 +2,50 @@
 #define AGHSLIST_H
 
 template<class T>
-class aghSList : public aghContainer<T> {
+class aghSlist : public aghContainer<T> {
   public:
-    virtual ~aghSList();
-    aghSList();
-    aghSList(const aghSList&);
-    //aghSList(aghContainer<T>&);
+    virtual ~aghSlist();
+    aghSlist();
+    aghSlist(const aghSlist&);
+    //aghSlist(aghContainer<T>&);
     bool insert(int, T const&);
     T& at(int) const;
     int size() const;
     bool remove(int);
-    aghSList<T>& operator=(aghSList<T> const& element);
+    aghSlist<T>& operator=(aghSlist<T> const& element);
     bool operator==(aghContainer<T> const& element);
     bool operator!=(aghContainer<T> const& element);
 
-    aghSListItem<T>& getHead() const;
+    aghSlistItem<T>& getHead() const;
     void print();
   private:
-    aghSListItem<T> *head;
+    aghSlistItem<T> *head;
 };
 
 template<class T>
-aghSList<T>::~aghSList() {
-    aghSListItem<T> *temp = this->head;
+aghSlist<T>::~aghSlist() {
+    aghSlistItem<T> *temp = this->head;
     while( temp != NULL ) {
-        aghSListItem<T> *prev = temp;
+        aghSlistItem<T> *prev = temp;
         temp = temp->getNext();
         delete prev;
     }
 }
 
 template<class T>
-aghSList<T>::aghSList() {
+aghSlist<T>::aghSlist() {
     this->head = NULL;
 }
 
 template<class T>
-aghSListItem<T>& aghSList<T>::getHead() const {
+aghSlistItem<T>& aghSlist<T>::getHead() const {
     return *(this->head);
 }
 
 template<class T>
-aghSList<T>::aghSList(const aghSList &list) {
+aghSlist<T>::aghSlist(const aghSlist &list) {
     this->head = NULL;
-    aghSListItem<T> *temp = &list.getHead();
+    aghSlistItem<T> *temp = &list.getHead();
     while( temp != NULL ) {
         this->append(temp->getValue());
         temp = temp->getNext();
@@ -53,19 +53,19 @@ aghSList<T>::aghSList(const aghSList &list) {
 }
 /*
 template<class T>
-aghSList<T>::aghSList(aghContainer<T> &container) {
+aghSlist<T>::aghSlist(aghContainer<T> &container) {
     
 }
 */
 template<class T>
-bool aghSList<T>::insert(int index, T const &t) {
-    aghSListItem<T> *item = new aghSListItem<T>(t);
+bool aghSlist<T>::insert(int index, T const &t) {
+    aghSlistItem<T> *item = new aghSlistItem<T>(t);
     if( this->head == NULL && index == 0 ) {
         this->head = item ;
         return true;
     }
     int i=1;
-    aghSListItem<T> *temp = this->head;
+    aghSlistItem<T> *temp = this->head;
     while( temp != NULL ) {
         if( i == index ) {
             if( temp->getNext() != NULL ) {
@@ -81,9 +81,9 @@ bool aghSList<T>::insert(int index, T const &t) {
 }
 
 template<class T>
-T& aghSList<T>::at(int index) const {
+T& aghSlist<T>::at(int index) const {
     int i=0;
-    aghSListItem<T> *temp = this->head;
+    aghSlistItem<T> *temp = this->head;
     while( i++ < index ) {
         temp = temp->getNext();
         if( temp == NULL ) {
@@ -94,9 +94,9 @@ T& aghSList<T>::at(int index) const {
 }
 
 template<class T>
-int aghSList<T>::size() const {
+int aghSlist<T>::size() const {
     int size = 0;
-    aghSListItem<T> *temp = this->head;
+    aghSlistItem<T> *temp = this->head;
     while( temp != NULL ) {
         ++size;
         temp = temp->getNext();
@@ -105,19 +105,19 @@ int aghSList<T>::size() const {
 }
 
 template<class T>
-bool aghSList<T>::remove(int index) {
+bool aghSlist<T>::remove(int index) {
     if( index == 0 ) {
         if( this->head == NULL ) {
             return false;
         }
-        aghSListItem<T> *it = ( this->head->getNext() != NULL ) ? this->head->getNext() : NULL ;
+        aghSlistItem<T> *it = ( this->head->getNext() != NULL ) ? this->head->getNext() : NULL ;
         this->head = it;
     }
-    aghSListItem<T> *temp = this->head;
+    aghSlistItem<T> *temp = this->head;
     int i=1;
     while( temp != NULL ) {
         if( i == index ) {
-            aghSListItem<T> *it = ( temp->getNext()->getNext() != NULL ) ? 
+            aghSlistItem<T> *it = ( temp->getNext()->getNext() != NULL ) ? 
                 temp->getNext()->getNext() : NULL ;
             temp->setNext(it);
             return true;
@@ -129,10 +129,10 @@ bool aghSList<T>::remove(int index) {
 }
 
 template<class T>
-aghSList<T>& aghSList<T>::operator=(aghSList<T> const& list) {
-    if( aghSList<T>::operator!=(list) ) {
+aghSlist<T>& aghSlist<T>::operator=(aghSlist<T> const& list) {
+    if( aghSlist<T>::operator!=(list) ) {
         this->clear();
-        aghSListItem<T> *temp = &list.getHead();
+        aghSlistItem<T> *temp = &list.getHead();
         while( temp != NULL ) {
             this->append(temp->getValue());
             temp = temp->getNext();
@@ -142,19 +142,19 @@ aghSList<T>& aghSList<T>::operator=(aghSList<T> const& list) {
 }
 
 template<class T>
-bool aghSList<T>::operator==(aghContainer<T> const& element) {
+bool aghSlist<T>::operator==(aghContainer<T> const& element) {
     return this->aghContainer<T>::operator==(element);
 }
 
 template<class T>
-bool aghSList<T>::operator!=(aghContainer<T> const& element) {
+bool aghSlist<T>::operator!=(aghContainer<T> const& element) {
     return this->aghContainer<T>::operator!=(element);
 }
 
 
 template<class T>
-void aghSList<T>::print() {
-    aghSListItem<T> *temp = this->head;
+void aghSlist<T>::print() {
+    aghSlistItem<T> *temp = this->head;
     cout << "[ " ;
     while( temp != NULL ) {
         cout << temp->getValue() << " " ;

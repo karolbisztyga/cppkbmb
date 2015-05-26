@@ -2,19 +2,19 @@
 #define AGHDLISTITEM_H
 
 template<class T>
-class aghDListItem {
+class aghDlistItem {
 
   private:
-    aghDListItem *next,*prev;
+    aghDlistItem *next,*prev;
     T value;
   public:
-    aghDListItem(aghDListItem<T>*,const T&);
+    aghDlistItem(aghDlistItem<T>*,const T&);
 
-    aghDListItem<T> *getNext() const;
-    aghDListItem<T> *getPrev() const;
+    aghDlistItem<T> *getNext() const;
+    aghDlistItem<T> *getPrev() const;
 
-    void setNext(aghDListItem<T>*);
-    void setPrev(aghDListItem<T>*);
+    void setNext(aghDlistItem<T>*);
+    void setPrev(aghDlistItem<T>*);
 
     T& getValue();
     void setValue(const T&);
@@ -22,40 +22,40 @@ class aghDListItem {
 };
 
 template<class T>
-aghDListItem<T>::aghDListItem(aghDListItem<T> *prev, const T &value) {
+aghDlistItem<T>::aghDlistItem(aghDlistItem<T> *prev, const T &value) {
     this->next = NULL;
     this->prev = prev;
     this->value = value;
 }
 
 template<class T>
-aghDListItem<T>* aghDListItem<T>::getNext() const {
+aghDlistItem<T>* aghDlistItem<T>::getNext() const {
     return this->next;
 }
 
 template<class T>
-aghDListItem<T>* aghDListItem<T>::getPrev() const {
+aghDlistItem<T>* aghDlistItem<T>::getPrev() const {
     return this->prev;
 }
 
 template<class T>
-void aghDListItem<T>::setNext(aghDListItem<T> *next) {
+void aghDlistItem<T>::setNext(aghDlistItem<T> *next) {
     this->next = next;
 }
 
 template<class T>
-void aghDListItem<T>::setPrev(aghDListItem<T> *prev) {
+void aghDlistItem<T>::setPrev(aghDlistItem<T> *prev) {
     this->prev = prev;
 }
 
 template<class T>
-T& aghDListItem<T>::getValue() {
+T& aghDlistItem<T>::getValue() {
     return this->value;
 }
 
 
 template<class T>
-void aghDListItem<T>::setValue(const T &value) {
+void aghDlistItem<T>::setValue(const T &value) {
     this->value = value;
 }
 
