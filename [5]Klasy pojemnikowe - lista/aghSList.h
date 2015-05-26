@@ -7,7 +7,7 @@ class aghSList : public aghContainer<T> {
     virtual ~aghSList();
     aghSList();
     aghSList(const aghSList&);
-    aghSList(aghContainer<T>&);
+    //aghSList(aghContainer<T>&);
     bool insert(int, T const&);
     T& at(int) const;
     int size() const;
@@ -24,7 +24,12 @@ class aghSList : public aghContainer<T> {
 
 template<class T>
 aghSList<T>::~aghSList() {
-    delete this->head;
+    aghSListItem<T> *temp = this->head;
+    while( temp != NULL ) {
+        aghSListItem<T> *prev = temp;
+        temp = temp->getNext();
+        delete prev;
+    }
 }
 
 template<class T>
@@ -34,14 +39,15 @@ aghSList<T>::aghSList() {
 
 template<class T>
 aghSListItem<T>& aghSList<T>::getHead() const {
-    return this->head;
+    return *(this->head);
 }
 
 template<class T>
 aghSList<T>::aghSList(const aghSList &list) {
-    aghSListItem<T> *temp = list.getHead();
+    this->head = NULL;
+    aghSListItem<T> *temp = &list.getHead();
     while( temp != NULL ) {
-        this->append(*temp);
+        this->append(temp->getValue());
         temp = temp->getNext();
     }
 }
@@ -108,9 +114,9 @@ bool aghSList<T>::remove(int index) {
         this->head = it;
     }
     aghSListItem<T> *temp = this->head;
-    int i=0;
+    int i=1;
     while( temp != NULL ) {
-        if( i+1 == index ) {
+        if( i == index ) {
             aghSListItem<T> *it = ( temp->getNext()->getNext() != NULL ) ? 
                 temp->getNext()->getNext() : NULL ;
             temp->setNext(it);
@@ -123,18 +129,26 @@ bool aghSList<T>::remove(int index) {
 }
 
 template<class T>
-aghSList<T>& aghSList<T>::operator=(aghSList<T> const& element) {
-    
+aghSList<T>& aghSList<T>::operator=(aghSList<T> const& list) {
+    if( aghSList<T>::operator!=(list) ) {
+        this->clear();
+        aghSListItem<T> *temp = &list.getHead();
+        while( temp != NULL ) {
+            this->append(temp->getValue());
+            temp = temp->getNext();
+        }
+        return *this;
+    }
 }
 
 template<class T>
 bool aghSList<T>::operator==(aghContainer<T> const& element) {
-    
+    return this->aghContainer<T>::operator==(element);
 }
 
 template<class T>
 bool aghSList<T>::operator!=(aghContainer<T> const& element) {
-    
+    return this->aghContainer<T>::operator!=(element);
 }
 
 
@@ -146,7 +160,7 @@ void aghSList<T>::print() {
         cout << temp->getValue() << " " ;
         temp = temp->getNext();
     }
-    cout << "]";
+    cout << "]\n";
 }
 
 #endif

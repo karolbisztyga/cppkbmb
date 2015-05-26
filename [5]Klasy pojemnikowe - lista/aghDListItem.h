@@ -16,7 +16,7 @@ class aghDListItem {
     void setNext(aghDListItem<T>*);
     void setPrev(aghDListItem<T>*);
 
-    T getValue();
+    T& getValue();
     void setValue(const T&);
 
 };
@@ -49,7 +49,7 @@ void aghDListItem<T>::setPrev(aghDListItem<T> *prev) {
 }
 
 template<class T>
-T aghDListItem<T>::getValue() {
+T& aghDListItem<T>::getValue() {
     return this->value;
 }
 
