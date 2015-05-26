@@ -8,7 +8,6 @@ int main(void)
 {
     cout << "main by kk. Last updated 15.04.2013\n";
 
-
     aghDlist<aghDlist<int> > a;
     aghContainer<int>* c1 = new aghDlist<int>;
     aghContainer<int>* c2;
@@ -24,7 +23,7 @@ int main(void)
     for(int i=0;i<3;i++)
         t1 = t1 && (ttab1[i] == c1->at(i));
     showTestResult(1, t1);
-/*
+
     // 2nd test - konstruktor
     c2 = new aghDlist<int>(*c1);
     bool t2 = c2->size() == 3;
@@ -130,7 +129,7 @@ int main(void)
     {
         showTestResult(15, false);
     }
-*/
+
     cout << "Finally, this is the end...\n";
 
     return 0;

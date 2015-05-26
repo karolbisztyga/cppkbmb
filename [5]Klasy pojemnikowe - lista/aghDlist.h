@@ -7,12 +7,13 @@ class aghDlist : public aghContainer<T> {
     virtual ~aghDlist();
     aghDlist();
     aghDlist(const aghDlist&);
-    //aghDlist(aghContainer<T>&);
+    aghDlist(aghContainer<T>&);
     bool insert(int, T const&);
     T& at(int) const;
     int size() const;
     bool remove(int);
     aghDlist<T>& operator=(aghDlist<T> const& element);
+    aghDlist<T>& operator=(aghContainer<T> const& element);
     bool operator==(aghContainer<T> const& element);
     bool operator!=(aghContainer<T> const& element);
 
@@ -38,6 +39,17 @@ aghDlistItem<T>& aghDlist<T>::getHead() const {
 }
 
 template<class T>
+aghDlist<T>::aghDlist(aghContainer<T> &container) {
+    aghDlist<int> *pt = static_cast<aghDlist<int>*>(&container);
+    this->head = NULL;
+    aghDlistItem<T> *temp = &pt->getHead();
+    while( temp != NULL ) {
+        this->append(temp->getValue());
+        temp = temp->getNext();
+    }
+}
+
+template<class T>
 aghDlist<T>::aghDlist(const aghDlist &list) {
     this->head = NULL;
     aghDlistItem<T> *temp = &list.getHead();
@@ -50,7 +62,11 @@ aghDlist<T>::aghDlist(const aghDlist &list) {
 template<class T>
 bool aghDlist<T>::insert(int index, T const &t) {
     aghDlistItem<T> *item = new aghDlistItem<T>(NULL,t);
-    if( this->head == NULL && index == 0 ) {
+    if( index == 0 ) {
+        if( this->head != NULL ) {
+            this->head->setPrev(item);
+            item->setNext(this->head);
+        }
         this->head = item;
         return true;
     }
@@ -113,7 +129,9 @@ bool aghDlist<T>::remove(int index) {
                     temp->getPrev()->setNext(temp->getNext());
                 }
             }
-            this->head = ( temp->getNext() != NULL ) ? temp->getNext() : NULL;
+            if( temp == this->head ) {
+                this->head = ( temp->getNext() != NULL ) ? temp->getNext() : NULL;
+            }
             delete temp;
             return true;
         }
@@ -132,6 +150,13 @@ aghDlist<T>& aghDlist<T>::operator=(aghDlist<T> const& list) {
             this->append(temp->getValue());
             temp = temp->getNext();
         }
+    }
+}
+
+template<class T>
+aghDlist<T>& aghDlist<T>::operator=(aghContainer<T> const& element) {
+    if( this->operator!=(element) ) {
+        this->aghContainer<T>::operator=(element);
     }
 }
 
