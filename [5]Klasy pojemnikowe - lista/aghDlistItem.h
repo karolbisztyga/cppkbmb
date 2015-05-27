@@ -9,6 +9,7 @@ class aghDlistItem {
     T value;
   public:
     aghDlistItem(aghDlistItem<T>*,const T&);
+    ~aghDlistItem();
 
     aghDlistItem<T> *getNext() const;
     aghDlistItem<T> *getPrev() const;
@@ -26,6 +27,10 @@ aghDlistItem<T>::aghDlistItem(aghDlistItem<T> *prev, const T &value) {
     this->next = NULL;
     this->prev = prev;
     this->value = value;
+}
+
+template<class T>
+aghDlistItem<T>::~aghDlistItem() {
 }
 
 template<class T>

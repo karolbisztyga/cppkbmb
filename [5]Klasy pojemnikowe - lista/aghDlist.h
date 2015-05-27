@@ -30,7 +30,7 @@ aghDlist<T>::aghDlist() {
 
 template<class T>
 aghDlist<T>::~aghDlist() {
-    delete this->head;
+    this->clear();
 }
 
 template<class T>
@@ -85,7 +85,6 @@ bool aghDlist<T>::insert(int index, T const &t) {
         ++i;
         temp = temp->getNext();
     }
-    delete item;
     return false;
 }
 

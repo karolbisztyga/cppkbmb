@@ -24,12 +24,7 @@ class aghSlist : public aghContainer<T> {
 
 template<class T>
 aghSlist<T>::~aghSlist() {
-    aghSlistItem<T> *temp = this->head;
-    while( temp != NULL ) {
-        aghSlistItem<T> *prev = temp;
-        temp = temp->getNext();
-        delete prev;
-    }
+    this->clear();
 }
 
 template<class T>
