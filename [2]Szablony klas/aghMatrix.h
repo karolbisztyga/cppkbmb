@@ -58,16 +58,20 @@ aghMatrix<T>::aghMatrix() {
 
 template<class T>
 aghMatrix<T>::~aghMatrix() {
+  if( this->rows != 0 && this->cols != 0 ) {
+    for( int i=0 ; i<this->rows ; ++i ) {
+      delete [] this->matrix[i];
+    }
+    delete [] this->matrix;
+  }
   this->rows=0;
   this->cols=0;
-  /*for( int i=0 ; i<this->rows ; ++i ) {
-    delete [] this->matrix[i];
-  }
-  delete [] this->matrix;*/
 }
 
 template<class T>
 aghMatrix<T>::aghMatrix(const aghMatrix<T> &m) {
+  this->rows = 0;
+  this->cols = 0;
   this->setSize(m.getRows(),m.getCols());
   if( this->cols == m.getCols() && this->rows == m.getRows() ) {
     for (int i = 0; i < this->rows; ++i) {
@@ -80,6 +84,8 @@ aghMatrix<T>::aghMatrix(const aghMatrix<T> &m) {
 
 template<class T>
 aghMatrix<T>::aghMatrix(int rows, int cols) {
+  this->rows = 0;
+  this->cols = 0;
   this->setSize(rows,cols);
 }
 
@@ -87,6 +93,12 @@ aghMatrix<T>::aghMatrix(int rows, int cols) {
 
 template<class T>
 void aghMatrix<T>::setSize(int rows, int cols) {
+  if( this->rows != 0 && this->cols != 0 ) {
+    for( int i=0 ; i<this->rows ; ++i ) {
+      delete [] this->matrix[i];
+    }
+    delete [] this->matrix;
+  }
   this->rows = rows;
   this->cols = cols;
   this->matrix = new T*[this->rows];
@@ -238,7 +250,9 @@ aghMatrix<char*> aghMatrix<char*>::operator*(aghMatrix<char*> &m) {
     for( int j=0,endj=m.getCols() ; j<endj ; ++j ) {
       char* c = new char[0];
       for( int k=0 ; k<this->cols ; ++k ) {
-        c = this->addWords(c,this->multipleWords(this->matrix[i][k],m.getItem(k,j)));
+        char *word = this->multipleWords(this->matrix[i][k],m.getItem(k,j));
+        c = this->addWords(c,word);
+        delete [] word;
       }
       result.setItem(i,j,c);
     }
@@ -343,7 +357,9 @@ aghMatrix<char*> aghMatrix<char*>::operator+(aghMatrix<char*> &m) {
   aghMatrix<char*> result(this->rows,this->cols);
   for( short i=0 ; i<this->rows ; ++i ) {
     for( short j=0 ; j<this->cols ; ++j ) {
-      result.setItem(i,j,this->addWords(this->matrix[i][j],m.getItem(i,j)));
+      char *word = this->addWords(this->matrix[i][j],m.getItem(i,j));
+      result.setItem(i,j,word);
+      delete [] word;
     }
   }
   return result;

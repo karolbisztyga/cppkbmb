@@ -289,7 +289,7 @@ int main(void)
         showTestResult(21, false);
     }
     /////////////////////////////////////////////////////
-
+/* */
     cout << "Finally, this is the end...\n";
 
     return 0;
