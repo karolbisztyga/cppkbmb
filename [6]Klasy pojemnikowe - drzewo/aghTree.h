@@ -142,61 +142,72 @@ int aghTree<T>::size() const {
 /// \return bool
 ///		true - element existed and has been removed
 ///		false - there wasn't such element
-template<class T>
-bool aghTree<T>::remove(int index) {
-	if( index < 0 || index >= this->size() ) {
+template <class T>
+bool aghTree<T>::remove(int index){
+	if (index < 0 || index >= this->size())
 		return false;
-	}
-	if( index == 0 && this->size() == 1 ) {
-		this->root = NULL;
+ 
+	aghTreeItem<T> *item_to_remove = iterate(index);
+	if (item_to_remove->getLeft() == NULL && item_to_remove->getRight() == NULL){ //if element don't have children (leaf)
+		if (item_to_remove == this->root){
+			delete this->root;
+			this->root = 0;
+			return true;
+		}
+ 
+		if (item_to_remove->getParent()->getLeft() == item_to_remove)
+			item_to_remove->getParent()->setLeft(NULL);
+		if (item_to_remove->getParent()->getRight() == item_to_remove)
+			item_to_remove->getParent()->setRight(NULL);
+		delete item_to_remove;
+		item_to_remove = NULL;
 		return true;
 	}
-	aghTreeItem<T> *rm = this->iterate(index);
-	aghTreeItem<T> *pt = NULL;
-	if( rm->getRight() == NULL ) {
-        if( rm->getLeft() != NULL ) {
-            pt = rm->getLeft();
-            if( pt->getRight() != NULL ) {
-                while( pt->getRight() != NULL ) {
-                	pt = pt->getRight();
-                }
-                pt->getParent()->setRight(pt->getLeft());
-            }
-            else {
-            	rm->setLeft( pt->getLeft() );
-            }
-        }
-        else {
-            if( rm->getParent() != NULL ) {
-                if( rm->getParent()->getLeft() == rm) {
-                	rm->getParent()->setLeft(NULL);
-                }
-                else {
-                	rm->getParent()->setRight(NULL);
-                }
-            }
-            delete rm;
-        }
-    }
-    else {
-    	pt = rm->getRight();
-        if( pt->getLeft() != NULL ) {
-            while ( pt->getLeft() != NULL ) {
-            	pt = pt->getLeft();
-            }
-            pt->getParent()->setLeft( pt->getRight() );
-        }
-        else {
-        	rm->setRight( pt->getRight() );
-        }
-    }
-    if ( pt != NULL ) {
-        rm->setValue(pt->getValue());
-        delete pt;
-    }
-    return true;
+	if (item_to_remove->getLeft() != NULL && item_to_remove->getRight() == NULL){ //if element have only left child
+		if (item_to_remove == this->root){
+			this->root = item_to_remove->getLeft();
+			delete this->root->getParent();
+			this->root->setParent(NULL);
+			return true;
+		}
+		aghTreeItem<T> *prev_item = item_to_remove->getParent();
+		if (prev_item->getLeft() == item_to_remove){
+			prev_item->setLeft(item_to_remove->getLeft());
+			delete item_to_remove;
+			prev_item->getLeft()->setParent(prev_item);
+		}
+		if (prev_item->getRight() == item_to_remove){
+			prev_item->setRight(item_to_remove->getLeft());
+			delete item_to_remove;
+			prev_item->getRight()->setParent(prev_item);
+		}
+		return true;
+	}
+	if (item_to_remove->getLeft() == NULL && item_to_remove->getRight() != NULL){ //if element have only right child
+		if (item_to_remove == this->root){
+			this->root = item_to_remove->getRight();
+			delete this->root->getParent();
+			this->root->setParent(NULL);
+			return true;
+		}
+		aghTreeItem<T> *prev_item = item_to_remove->getParent();
+		if (prev_item->getLeft() == item_to_remove){
+			prev_item->setLeft(item_to_remove->getRight());
+			delete item_to_remove;
+			prev_item->getLeft()->setParent(prev_item);
+		}
+		if (prev_item->getRight() == item_to_remove){
+			prev_item->setRight(item_to_remove->getRight());
+			delete item_to_remove;
+			prev_item->getRight()->setParent(prev_item);
+		}
+		return true;
+	}
+	//if element have two children
+	aghTreeItem<T> *smallest_item = iterate(index + 1);
+	item_to_remove->setValue(smallest_item->getValue());
+	return remove(index + 1);
 }
-
 /// \brief assigment operator
 ///
 /// \param aghTree - vector to be copied

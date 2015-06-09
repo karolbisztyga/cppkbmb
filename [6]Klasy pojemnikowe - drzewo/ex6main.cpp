@@ -10,10 +10,18 @@ int main(void)
 /* *
     aghTree<int> tree;
     tree.insert(0,4);
+    tree.insert(0,2);
+    tree.insert(0,6);
+    tree.insert(0,8);
+    tree.insert(0,1);
+    tree.insert(0,3);
+    tree.insert(0,7);
+    tree.insert(0,9);
+    tree.insert(0,5);
 
     tree.print();
     cout << endl;
-    tree.clear();
+    tree.remove(5);
     tree.print();
     cout << endl;
 /* */
@@ -103,7 +111,7 @@ int main(void)
         c1->append(ttab10_1[i]);
     for(int i=0;i<11;i++)
         t10 = t10 && (c1->at(i) == ttab10_1[i]);
-    //*c2 = *c1;
+    *c2 = *c1;
     c1->clear();
     *c1 << *c2;
     for(int i=0;i<11;i++)
@@ -140,7 +148,7 @@ int main(void)
     for(int i=0;i<5;i++)
         t14 = t14 && (c2->at(i) == ttab14[i]);
     showTestResult(14, t14);
-/*
+
     // 15th test - zwalnianie paieci
     try
     {
@@ -152,7 +160,7 @@ int main(void)
     {
         showTestResult(15, false);
     }
-*/
+
     cout << "Finally, this is the end...\n";
 
     return 0;

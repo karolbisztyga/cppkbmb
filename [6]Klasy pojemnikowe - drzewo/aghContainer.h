@@ -65,6 +65,7 @@ bool aghContainer<T>::replace(int index, T const &t) {
 template<class T>
 void aghContainer<T>::clear() {
     while( this->size() > 0 ) {
+        //cout << "\n here "<< this->size() <<"\n";
         this->remove(this->size()-1);
     }
 }
