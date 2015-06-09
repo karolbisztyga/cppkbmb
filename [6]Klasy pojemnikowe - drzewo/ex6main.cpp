@@ -7,8 +7,16 @@ void showTestResult(int, bool);
 int main(void)
 {
     cout << "main by kk. Last updated 15.04.2013\n";
+/* *
+    aghTree<int> tree;
+    tree.insert(0,4);
 
-/*
+    tree.print();
+    cout << endl;
+    tree.clear();
+    tree.print();
+    cout << endl;
+/* */
     aghVector<aghVector<int> > a;
     aghContainer<int>* c1 = new aghVector<int>;
     aghTree<int>* c2;
@@ -95,7 +103,7 @@ int main(void)
         c1->append(ttab10_1[i]);
     for(int i=0;i<11;i++)
         t10 = t10 && (c1->at(i) == ttab10_1[i]);
-    *c2 = *c1;
+    //*c2 = *c1;
     c1->clear();
     *c1 << *c2;
     for(int i=0;i<11;i++)
@@ -132,7 +140,7 @@ int main(void)
     for(int i=0;i<5;i++)
         t14 = t14 && (c2->at(i) == ttab14[i]);
     showTestResult(14, t14);
-
+/*
     // 15th test - zwalnianie paieci
     try
     {

@@ -3,79 +3,68 @@
 
 template<class T>
 class aghTree : public aghContainer<T> {
-
-public:
-  virtual ~aghTree();
-  aghTree();
-  aghTree(const aghTree&);
-  aghTree(aghContainer<T>&);
-  bool insert(int, T const&);
-  T& at(int) const;
-  int size() const;
-  bool remove(int);
-
-  aghTree<T>& operator=(aghTree<T> const& element);
-  aghTree<T>& operator=(aghContainer<T> const& element);
-  bool operator==(aghContainer<T> const& element);
-  bool operator!=(aghContainer<T> const& element);
-
 private:
+	aghTreeItem<T> *root;
+	void print(aghTreeItem<T>*);
+public:
+	virtual ~aghTree();
+	aghTree();
+	aghTree(const aghTree&);
+	aghTree(aghContainer<T>&);
+	bool insert(int, T const&);
+	T& at(int) const;
+	int size() const;
+	bool remove(int);
+	void print();
+    aghTreeItem<T>* iterate(int) const;
 
-  class Item {
-    public:
-    private:
-  };
-
-	int length;
-	T *items;
+	aghTree<T>& operator=(aghTree<T> const& element);
+	aghTree<T>& operator=(aghContainer<T> const& element);
+	bool operator==(aghContainer<T> const& element);
+	bool operator!=(aghContainer<T> const& element);
 };
 
 
-
-
-/*
+/* */
 /// \brief constructor no params
 ///
 ///
 template<class T>
-aghVector<T>::aghVector() {
-	this->length = 0;
-	this->items = new T[0];
+aghTree<T>::aghTree() {
+	this->root = NULL;
 }
-
+/* */
 /// \brief destructor
 ///
 ///
 template<class T>
-aghVector<T>::~aghVector() {
-	delete [] this->items;
+aghTree<T>::~aghTree() {
+	this->clear();
 }
-
+/* */
 /// \brief constructor copy
 ///
-/// \param v - vector to be copied
+/// \param v - tree to be copied
 template<class T>
-aghVector<T>::aghVector(const aghVector<T> &v) {
-	this->length = v.size();
-	this->items = new T[this->length];
-	for( int i=0 ; i<this->length ; ++i ) {
-		this->items[i] = v[i];
+aghTree<T>::aghTree(const aghTree<T> &t) {
+	this->root = NULL;
+	for( int i=0 ; i<t.size() ; ++i ) {
+		this->append(t.at(i));
 	}
 }
-
+/* */
 /// \brief constructor copy
 ///
-/// \param c - container to eb copied
+/// \param c - container to br copied
 template<class T>
-aghVector<T>::aghVector(aghContainer<T> &c) {
-	this->length = c.size();
-	this->items = new T[this->length];
-	for( int i=0 ; i<this->length ; ++i ) {
-		this->items[i] = c.at(i);
+aghTree<T>::aghTree(aghContainer<T> &c) {
+	this->root = NULL;
+	for( int i=0 ; i<c.size() ; ++i ) {
+		this->append(c.at(i));
 	}
 }
-
-/// \brief inserts element in vector
+/* */
+/// \brief inserts element in tree
 ///
 /// \param index - where is the element meant to be
 /// \param t - element to be added
@@ -84,39 +73,41 @@ aghVector<T>::aghVector(aghContainer<T> &c) {
 ///		true - inserting successful
 ///		false - inserting unsuccessful
 template<class T>
-bool aghVector<T>::insert(int index, T const &t) {
-	if( index > this->length+1 ) {
-		return false;
+bool aghTree<T>::insert(int index, T const &t) {
+	aghTreeItem<T> *item = new aghTreeItem<T>(t);
+	if( this->root == NULL ) {
+		this->root = item;
+		return true;
 	}
-	T *temp = new T[this->length];
-	for( int i=0 ; i<this->length ; ++i ) {
-		temp[i] = this->items[i];
+	aghTreeItem<T> *temp = this->root;
+	while( temp != NULL ) {
+		if( temp->getValue() < item->getValue() ) {
+			if( temp->getRight() == NULL ) {
+				temp->setRight(item);
+				item->setParent(temp);
+				return true;
+			}
+			temp = temp->getRight();
+		} else {
+			if( temp->getLeft() == NULL ) {
+				temp->setLeft(item);
+				item->setParent(temp);
+				return true;
+			}
+			temp = temp->getLeft();
+		}
 	}
-	delete [] this->items;
-	++this->length;
-	this->items = new T[this->length];
-	for( int i=0 ; i<index ; ++i ) {
-		this->items[i] = temp[i];
-	}
-	this->items[index] = t;
-	for( int i=index+1 ; i<this->length ; ++i ) {
-		this->items[i] = temp[i-1];
-	}
-	delete [] temp;
-	return true;
+	return false;
 }
 
 /// \brief returns vector's element on given index
 ///
 /// \param index - index of an element
 ///
-/// \return T& - element's reference
+/// \return T& - element's value reference
 template<class T>
-T& aghVector<T>::at(int index) const {
-	if( index >= this->length ) {
-		throw aghException(0, "Index out of bound", __FILE__, __LINE__);
-	}
-	return this->items[index];
+T& aghTree<T>::at(int index) const {
+	return this->iterate(index)->getValue();
 }
 
 /// \brief returns vector's size
@@ -124,8 +115,24 @@ T& aghVector<T>::at(int index) const {
 ///
 /// \return int - size of the vector
 template<class T>
-int aghVector<T>::size() const {
-	return this->length;
+int aghTree<T>::size() const {
+	int i = 0;
+	aghTreeItem<T> *temp = this->root;
+    aghVector<aghTreeItem<T>*> *vector = new aghVector<aghTreeItem<T>*>();
+    while( (vector->size() > 0) || temp != NULL ) {
+        if( temp != NULL ) {
+            vector->append(temp);
+            temp = temp->getLeft();
+        }
+        else {
+            temp = vector->at(vector->size()-1);
+            vector->remove(vector->size() - 1);
+            ++i;
+            temp = temp->getRight();
+        }
+    }
+    delete vector;
+    return i;
 }
 
 /// \brief removes element from vector
@@ -136,47 +143,81 @@ int aghVector<T>::size() const {
 ///		true - element existed and has been removed
 ///		false - there wasn't such element
 template<class T>
-bool aghVector<T>::remove(int index) {
-	if( index >= this->length || index < 0 ) {
+bool aghTree<T>::remove(int index) {
+	if( index < 0 || index >= this->size() ) {
 		return false;
 	}
-	T *temp = new T[this->length];
-	for( int i=0 ; i<this->length ; ++i ) {
-		temp[i] = this->items[i];
+	if( index == 0 && this->size() == 1 ) {
+		this->root = NULL;
+		return true;
 	}
-	delete [] this->items;
-	this->items = new T[this->length-1];
-	for( int i=0,c=0 ; i<this->length ; ++i ) {
-		if( i != index ) {
-			this->items[c++] = temp[i];
-		}
-	}
-	--this->length;
-	delete [] temp;
-	return true;
+	aghTreeItem<T> *rm = this->iterate(index);
+	aghTreeItem<T> *pt = NULL;
+	if( rm->getRight() == NULL ) {
+        if( rm->getLeft() != NULL ) {
+            pt = rm->getLeft();
+            if( pt->getRight() != NULL ) {
+                while( pt->getRight() != NULL ) {
+                	pt = pt->getRight();
+                }
+                pt->getParent()->setRight(pt->getLeft());
+            }
+            else {
+            	rm->setLeft( pt->getLeft() );
+            }
+        }
+        else {
+            if( rm->getParent() != NULL ) {
+                if( rm->getParent()->getLeft() == rm) {
+                	rm->getParent()->setLeft(NULL);
+                }
+                else {
+                	rm->getParent()->setRight(NULL);
+                }
+            }
+            delete rm;
+        }
+    }
+    else {
+    	pt = rm->getRight();
+        if( pt->getLeft() != NULL ) {
+            while ( pt->getLeft() != NULL ) {
+            	pt = pt->getLeft();
+            }
+            pt->getParent()->setLeft( pt->getRight() );
+        }
+        else {
+        	rm->setRight( pt->getRight() );
+        }
+    }
+    if ( pt != NULL ) {
+        rm->setValue(pt->getValue());
+        delete pt;
+    }
+    return true;
 }
 
 /// \brief assigment operator
 ///
-/// \param aghVector - vector to be copied
+/// \param aghTree - vector to be copied
 ///
-/// \return aghVector<T>& - vector's reference
+/// \return aghTree<T>& - vector's reference
 template<class T>
-aghVector<T>& aghVector<T>::operator=(aghVector<T> const& element) {
-	if( this->operator!=(element) ) {
-		this->aghContainer<T>::operator=(element);
+aghTree<T>& aghTree<T>::operator=(aghTree<T> const& tree) {
+	if( this->operator!=(tree) ) {
+		this->aghContainer<T>::operator=(tree);
 	}
 }
 
 /// \brief assigment operator
 ///
-/// \param aghVector - container to be copied
+/// \param aghTree - container to be copied
 ///
-/// \return aghVector<T>& - vector's reference
+/// \return aghTree<T>& - vector's reference
 template<class T>
-aghVector<T>& aghVector<T>::operator=(aghContainer<T> const& element) {
-	if( this->operator!=(element) ) {
-		this->aghContainer<T>::operator=(element);
+aghTree<T>& aghTree<T>::operator=(aghContainer<T> const& con) {
+	if( this->operator!=(con) ) {
+		this->aghContainer<T>::operator=(con);
 	}
 }
 
@@ -188,7 +229,7 @@ aghVector<T>& aghVector<T>::operator=(aghContainer<T> const& element) {
 ///		true - containers are the same
 ///		false - containers are different
 template<class T>
-bool aghVector<T>::operator==(aghContainer<T> const& element) {
+bool aghTree<T>::operator==(aghContainer<T> const& element) {
 	return this->aghContainer<T>::operator==(element);
 }
 
@@ -200,8 +241,47 @@ bool aghVector<T>::operator==(aghContainer<T> const& element) {
 ///		true - containers are different
 ///		false - containers are the same
 template<class T>
-bool aghVector<T>::operator!=(aghContainer<T> const& element) {
+bool aghTree<T>::operator!=(aghContainer<T> const& element) {
 	return this->aghContainer<T>::operator!=(element);
 }
-*/
+
+template<class T>
+aghTreeItem<T>* aghTree<T>::iterate(int index) const{
+    aghVector<aghTreeItem<T>*> vector;
+    aghTreeItem<T>* temp = this->root;
+    int i = 0;
+    while( (vector.size() > 0) || temp != NULL ) {
+        if( temp != NULL ){
+            vector.append(temp);
+            temp = temp->getLeft();
+        }
+        else {
+            temp = vector.at(vector.size()-1);
+            vector.remove(vector.size()-1);
+            if(i == index) {
+            	return temp;
+            }
+            ++i;
+            temp = temp->getRight();
+        }
+    }
+    throw aghException(0, "Index out of range", __FILE__, __LINE__);
+}
+
+
+template<class T>
+void aghTree<T>::print(){
+	this->print(this->root);
+}
+
+template<class T>
+void aghTree<T>::print(aghTreeItem<T> *branch){
+	if( branch == NULL ) {
+		return;
+	}
+	this->print(branch->getLeft());
+	cout << "["<< branch->getValue() <<"]" ;
+	this->print(branch->getRight());
+}
+
 #endif
