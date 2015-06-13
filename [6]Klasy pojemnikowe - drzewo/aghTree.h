@@ -143,69 +143,61 @@ int aghTree<T>::size() const {
 ///		true - element existed and has been removed
 ///		false - there wasn't such element
 template <class T>
-bool aghTree<T>::remove(int index){
-	if (index < 0 || index >= this->size())
+bool aghTree<T>::remove(int index) {
+	if(index < 0 || index >= this->size()) {
 		return false;
- 
-	aghTreeItem<T> *item_to_remove = iterate(index);
-	if (item_to_remove->getLeft() == NULL && item_to_remove->getRight() == NULL){ //if element don't have children (leaf)
-		if (item_to_remove == this->root){
+	}
+	aghTreeItem<T> *rm = iterate(index);
+	//no children
+	if(rm->getLeft() == NULL && rm->getRight() == NULL) {
+		if(rm == this->root) {
 			delete this->root;
 			this->root = 0;
 			return true;
 		}
  
-		if (item_to_remove->getParent()->getLeft() == item_to_remove)
-			item_to_remove->getParent()->setLeft(NULL);
-		if (item_to_remove->getParent()->getRight() == item_to_remove)
-			item_to_remove->getParent()->setRight(NULL);
-		delete item_to_remove;
-		item_to_remove = NULL;
+		if(rm->getParent()->getLeft() == rm) {
+			rm->getParent()->setLeft(NULL);
+		}
+		if(rm->getParent()->getRight() == rm) {
+			rm->getParent()->setRight(NULL);
+		}
+		delete rm;
+		rm = NULL;
 		return true;
 	}
-	if (item_to_remove->getLeft() != NULL && item_to_remove->getRight() == NULL){ //if element have only left child
-		if (item_to_remove == this->root){
-			this->root = item_to_remove->getLeft();
+	//one child
+	if(rm->getLeft() == NULL || rm->getRight() == NULL) {
+		if(rm == this->root) {
+			this->root = ( rm->getLeft() == NULL ) ? rm->getRight() : rm->getLeft();
 			delete this->root->getParent();
 			this->root->setParent(NULL);
 			return true;
 		}
-		aghTreeItem<T> *prev_item = item_to_remove->getParent();
-		if (prev_item->getLeft() == item_to_remove){
-			prev_item->setLeft(item_to_remove->getLeft());
-			delete item_to_remove;
-			prev_item->getLeft()->setParent(prev_item);
+		aghTreeItem<T> *pt = rm->getParent();
+		if(pt->getLeft() == rm) {
+			if( rm->getLeft() == NULL ) {
+				pt->setLeft(rm->getRight());
+			} else {
+				pt->setLeft(rm->getLeft());
+			}
+			delete rm;
+			pt->getLeft()->setParent(pt);
 		}
-		if (prev_item->getRight() == item_to_remove){
-			prev_item->setRight(item_to_remove->getLeft());
-			delete item_to_remove;
-			prev_item->getRight()->setParent(prev_item);
-		}
-		return true;
-	}
-	if (item_to_remove->getLeft() == NULL && item_to_remove->getRight() != NULL){ //if element have only right child
-		if (item_to_remove == this->root){
-			this->root = item_to_remove->getRight();
-			delete this->root->getParent();
-			this->root->setParent(NULL);
-			return true;
-		}
-		aghTreeItem<T> *prev_item = item_to_remove->getParent();
-		if (prev_item->getLeft() == item_to_remove){
-			prev_item->setLeft(item_to_remove->getRight());
-			delete item_to_remove;
-			prev_item->getLeft()->setParent(prev_item);
-		}
-		if (prev_item->getRight() == item_to_remove){
-			prev_item->setRight(item_to_remove->getRight());
-			delete item_to_remove;
-			prev_item->getRight()->setParent(prev_item);
+		if(pt->getRight() == rm) {
+			if( rm->getLeft() == NULL ) {
+				pt->setRight(rm->getRight());
+			} else {
+				pt->setRight(rm->getLeft());
+			}
+			delete rm;
+			pt->getRight()->setParent(pt);
 		}
 		return true;
 	}
-	//if element have two children
-	aghTreeItem<T> *smallest_item = iterate(index + 1);
-	item_to_remove->setValue(smallest_item->getValue());
+	//two children = recursive!
+	aghTreeItem<T> *sit = iterate(index + 1);
+	rm->setValue(sit->getValue());
 	return remove(index + 1);
 }
 /// \brief assigment operator
@@ -262,7 +254,7 @@ aghTreeItem<T>* aghTree<T>::iterate(int index) const{
     aghTreeItem<T>* temp = this->root;
     int i = 0;
     while( (vector.size() > 0) || temp != NULL ) {
-        if( temp != NULL ){
+        if( temp != NULL ) {
             vector.append(temp);
             temp = temp->getLeft();
         }
@@ -281,12 +273,12 @@ aghTreeItem<T>* aghTree<T>::iterate(int index) const{
 
 
 template<class T>
-void aghTree<T>::print(){
+void aghTree<T>::print() {
 	this->print(this->root);
 }
 
 template<class T>
-void aghTree<T>::print(aghTreeItem<T> *branch){
+void aghTree<T>::print(aghTreeItem<T> *branch) {
 	if( branch == NULL ) {
 		return;
 	}
